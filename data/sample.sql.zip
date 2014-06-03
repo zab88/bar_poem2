@@ -1,0 +1,3 @@
+<!--error--><br />
+<b>Fatal error</b>:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 124415428 bytes) in <b>Z:\home\localhost\www\Tools\phpmyadmin\libraries\zip.lib.php</b> on line <b>132</b><br />
+<script language=JavaScript src='/denwer/errors/phperror_js.php'></script>
