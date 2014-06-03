@@ -18,14 +18,18 @@ for r in curDB.fetchall():
     AllPoems.append(new_poem)
 
 #searchin for homonyms and undefined words
+file = open('../out/homonyms.html', 'w+')
 for poem in AllPoems:
-    #print(poem.original_title)
-    #poem.get_poem_homonyms()
-
-    print('=======!=====================')
-    print(poem.original_title)
-    for gg in poem.lines:
-        print(gg.line_original)
+    file.write("<p style='font-weight:bold'>"+poem.original_title+"<p>")
+    homonym_html = poem.get_poem_homonyms()
+    file.write(homonym_html)
+    # continue
+    # print('=======!=====================')
+    # print(poem.original_title)
+    # for gg in poem.lines:
+    #     print(gg.line_original)
 
     # for line in poem.lines:
     #     print(line.line_original)
+
+file.close()

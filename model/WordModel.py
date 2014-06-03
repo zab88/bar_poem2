@@ -5,20 +5,21 @@ MorphEngine = pymorphy2.MorphAnalyzer()
 HomonimArray = []
 
 #read homonyms
-# conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='sample', charset='utf8')
-# curDB = conn.cursor()
-#
-# # curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant%' LIMIT 100") #35, 68
-# curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant:%'")
-# i = 0
-# for r in curDB.fetchall():
-#     HomonimArray.append(r)
+conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='sample', charset='utf8')
+curDB = conn.cursor()
+
+# curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant%' LIMIT 100") #35, 68
+curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant:%'")
+i = 0
+for r in curDB.fetchall():
+    HomonimArray.append(r)
 
 class WordModel(object):
     word_original = ''
     isHomonim = False
     id_zaliznyak = 0
     is_debug = False
+    word_lat = ''
 
     parsed = []
 
@@ -54,5 +55,6 @@ class WordModel(object):
         for k, r in enumerate(HomonimArray):
             if r[1] == word:
                 self.id_zaliznyak = k
+                self.word_lat = r[2]
                 res = k
         return res
