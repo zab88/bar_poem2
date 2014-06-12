@@ -18,11 +18,11 @@ for r in curDB.fetchall():
     AllPoems.append(new_poem)
 
 #searchin for homonyms and undefined words
-file = open('../out/homonyms.html', 'w+')
+file = open('../out/homonyms3.html', 'w+')
 for poem in AllPoems:
     file.write("<p style='font-weight:bold'>"+poem.original_title+"<p>")
     homonym_html = poem.get_poem_homonyms()
-    file.write(homonym_html)
+    file.write( str(homonym_html) )
     # continue
     # print('=======!=====================')
     # print(poem.original_title)

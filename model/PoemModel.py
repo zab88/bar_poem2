@@ -31,7 +31,10 @@ class PoemModel(object):
             #print(l.line_original)
             homonym_line = l.getHighlightingHomonyms()
             if homonym_line is not None:
-                print(homonym_line)
+                #print(homonym_line)
                 out_html += homonym_line + "<br />\n"
-                return out_html
-        return None
+
+        if out_html != '':
+            return out_html
+        else:
+            return None

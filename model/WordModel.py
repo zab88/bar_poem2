@@ -22,6 +22,7 @@ class WordModel(object):
     word_lat = ''
 
     parsed = []
+    homonym_norm = []
 
     def __init__(self, word_original):
         self.word_original = word_original.replace(",", "")
@@ -31,12 +32,20 @@ class WordModel(object):
         self.makeMorphAnalyse()
 
     def makeMorphAnalyse(self):
-        global MorphEngine, HomonimArray
+        global MorphEngine
         self.parsed = MorphEngine.parse( self.word_original )
         if len(self.parsed) > 1:
-            self.isHomonim = True
-            #searh in starling
-            self.searh_starling_rinet(self.word_original)
+
+            #!!!searh in starling
+            # res = self.searh_starling_rinet(self.word_original)
+            # if res > -1:
+            #     self.isHomonim = True
+
+            #search only in pymorphy2
+            self.get_norm_homonyms_forms()
+            if len(self.homonym_norm) > 1:
+                self.isHomonim = True
+
             #!!
             # if self.id_zaliznyak > -1:
             #     print(HomonimArray[self.id_zaliznyak][2])
@@ -48,6 +57,16 @@ class WordModel(object):
                 for variant in self.parsed:
                     print(variant.normal_form)
                 print('----------------------------------')
+
+    def get_norm_homonyms_forms(self):
+        self.homonym_norm = []
+        for el in self.parsed:
+            if el.normal_form not in self.homonym_norm:
+                self.homonym_norm.append(el.normal_form)
+                el.tag.POS
+
+
+
 
     def searh_starling_rinet(self, word):
         global HomonimArray

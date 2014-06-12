@@ -13,14 +13,14 @@ class LineModel():
     #words = []
 
     def __init__(self, line_original):
-        self.line_original = line_original
+        self.line_original = line_original.decode('utf-8').lower().encode('utf-8')
         self.words = []
         self.__init_words__()
 
     def __init_words__(self):
         #tokenization
         global stopwords
-        tokens = nltk.word_tokenize( self.line_original.decode('utf-8').lower().encode('utf-8') )
+        tokens = nltk.word_tokenize( self.line_original )
         tokens = [i for i in tokens if ( i not in string.punctuation )]
         tokens = [i for i in tokens if ( i not in stopwords )]
         for w in tokens:
@@ -45,14 +45,20 @@ class LineModel():
 
     def highlight_words(self, line, word):
         #print(line, word)
+        old_line = str(line)
         line = line.decode('utf-8')
         word_to_replace = u"<a target='_blank' href='http://starling.rinet.ru/cgi-bin/morph.cgi?word=["+word.word_lat+u"]'>"+\
                           word.word_original+u"</a>"
+
+        word_to_replace = word.word_original + u" <span style='color:green'>("+u", ".join(word.homonym_norm)+u")</span> "
         #word_to_replace = word_to_replace.encode('utf-8')
         #print(line, word_to_replace)
         line = line.replace(word.word_original, word_to_replace )
 
         line = line.encode('utf-8')
+        if old_line == line:
+            print line
+            print word.word_original
         return line
 
         # indexes = [i for i in range(len(line)) if line.startswith(word, i)]
