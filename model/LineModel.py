@@ -7,6 +7,7 @@ stopwords = nltk.corpus.stopwords.words('russian')
 # stopwords.extend([u'БЫТЬ'.encode('utf-8'), u'a'.encode('utf-8')])
 stopwords.extend(['а'])
 
+ALL_HOMONYMS = {}
 
 class LineModel():
     line_original = ''
@@ -42,6 +43,27 @@ class LineModel():
         else:
             return None
 
+    def countHomonyms(self):
+        global ALL_HOMONYMS, ALL_HOMONYMS_NUM
+        for w in self.words:
+            if w.isHomonim:
+                #searchiong for place of word
+                num = ALL_HOMONYMS.get(w.word_original, 0)
+                num += 1
+                ALL_HOMONYMS[w.word_original] = num
+
+                # if w.word_original in ALL_HOMONYMS:
+                #     index = ALL_HOMONYMS.index(w.word_original)
+                # else:
+                #     index = -1
+                #
+                # if index < 0:
+                #     ALL_HOMONYMS.append(w.word_original)
+                #     ALL_HOMONYMS_NUM.append(1)
+                # else:
+                #     ALL_HOMONYMS_NUM[index] = ALL_HOMONYMS_NUM[index] + 1
+        return ALL_HOMONYMS
+
 
     def highlight_words(self, line, word):
         #print(line, word)
@@ -50,7 +72,8 @@ class LineModel():
         word_to_replace = u"<a target='_blank' href='http://starling.rinet.ru/cgi-bin/morph.cgi?word=["+word.word_lat+u"]'>"+\
                           word.word_original+u"</a>"
 
-        word_to_replace = word.word_original + u" <span style='color:green'>("+u", ".join(word.homonym_norm)+u")</span> "
+        word_to_replace = word.word_original + u" <span style='color:green'>("+\
+                          u", ".join(word.homonym_norm)+u" -- "+u", ".join(word.homonym_pos)+u")</span> "
         #word_to_replace = word_to_replace.encode('utf-8')
         #print(line, word_to_replace)
         line = line.replace(word.word_original, word_to_replace )

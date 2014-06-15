@@ -5,17 +5,17 @@ MorphEngine = pymorphy2.MorphAnalyzer()
 HomonimArray = []
 
 #read homonyms
-conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='sample', charset='utf8')
-curDB = conn.cursor()
+# conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='sample', charset='utf8')
+# curDB = conn.cursor()
 
 # curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant%' LIMIT 100") #35, 68
-curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant:%'")
-i = 0
-for r in curDB.fetchall():
-    HomonimArray.append(r)
+# curDB.execute("SELECT * FROM words WHERE html LIKE '%2 variant:%'")
+# i = 0
+# for r in curDB.fetchall():
+#     HomonimArray.append(r)
 
 class WordModel(object):
-    word_original = ''
+    #!word_original = ''
     isHomonim = False
     id_zaliznyak = 0
     is_debug = False
@@ -23,10 +23,14 @@ class WordModel(object):
 
     parsed = []
     homonym_norm = []
+    homonym_pos = []
 
     def __init__(self, word_original):
         self.word_original = word_original.replace(",", "")
         self.word_original = self.word_original.replace(":", "")
+        self.word_original = self.word_original.replace("„", "")
+        self.word_original = self.word_original.replace("„", "")
+        self.word_original = self.word_original.replace("«", "")
 
         self.word_original = self.word_original.decode('utf-8')
         self.makeMorphAnalyse()
@@ -60,10 +64,11 @@ class WordModel(object):
 
     def get_norm_homonyms_forms(self):
         self.homonym_norm = []
+        self.homonym_pos = []
         for el in self.parsed:
-            if el.normal_form not in self.homonym_norm:
+            if el.tag.POS not in self.homonym_pos:
                 self.homonym_norm.append(el.normal_form)
-                el.tag.POS
+                self.homonym_pos.append(el.tag.POS)
 
 
 

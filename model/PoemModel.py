@@ -30,11 +30,14 @@ class PoemModel(object):
         for l in self.lines:
             #print(l.line_original)
             homonym_line = l.getHighlightingHomonyms()
+            #let's also count homonyms
+            all_homonyms = l.countHomonyms()
+
             if homonym_line is not None:
                 #print(homonym_line)
                 out_html += homonym_line + "<br />\n"
 
         if out_html != '':
-            return out_html
+            return out_html, all_homonyms
         else:
-            return None
+            return None, all_homonyms
